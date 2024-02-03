@@ -30,5 +30,6 @@ To run the demo, please follow the following procedure. **FINEST** demo will be 
 	2. Execute "./demo.sh"
 	3. Check "LSTM_stability" for the demo result of FINEST on Reddit dataset
 
-# Abstract 
+Abstract
+---------------
 Modern recommender systems may generate significantly different recommendations due to small perturbations in the training data. Changes in the data from one user can alter the recommendations for other unrelated users. We propose a method to stabilize recommender systems against such perturbations. This is a challenging task due to (1) the unavailability of “ideal” ranked recommendation lists; (2) the scalability of optimizing the stability of rank lists containing all items and for all training instances; and (3) the possibility of various noisy perturbations. Our method, FINEST, overcomes these challenges by first obtaining reference rank lists from a given recommendation model and then fine-tuning the model under simulated perturbation scenarios with rank-preserving regularization on sampled items. Our experiments on three real-world datasets demonstrate that FINEST can ensure that recommender models produce stable recommendations under a wide range of different perturbations while preserving next-item prediction accuracy.
