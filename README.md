@@ -7,7 +7,7 @@ Overview
 
 This repository contains the code and dataset used in the FINEST paper.  
 [Link to Dataset](https://drive.google.com/file/d/1AvpAqBQvr0BduHDPVqssM5KIyIO_hHa4/view?usp=sharing)  
-**sh Demo.sh** command will execute FINIST on the LSTM model and reddit dataset (standard training for 50 epochs + fine-tuning for 50 epochs).  
+**sh demo.sh** command will execute FINIST on the BERT4Rec model and foursquare dataset (standard training for 50 epochs + fine-tuning for 50 epochs).  
 
 
 Usage
@@ -16,11 +16,10 @@ Usage
 The detailed execution procedure of **FINEST** is given as follows.
 
 1) Install all required libraries by "pip install -r requirements.txt".
-2) "src/main.py" and "src/LSTM.py" include data preparation/perturbation and training/evaluation parts of FINEST on the LSTM recommendation model, respectively.
+2) "src/[model_name]_main.py" and "src/LSTM.py" include data preparation/perturbation and training/evaluation parts of FINEST on the LSTM recommendation model, respectively.
 3) "python src/main.py [arguments]" will execute FINEST on the LSTM model with arguments.
 
 Note that the fine-tuning speed can be significantly improved by optimizing perturbation simulation part.
-Please contact the first author (Sejoon Oh) for the code of FINEST for other recommendation models.
 
 Demo
 ---------------
@@ -28,7 +27,7 @@ To run the demo, please follow the following procedure. **FINEST** demo will be 
 
 	1. Check permissions of files (if not, use the command "chmod 777 *")
 	2. Execute "./demo.sh"
-	3. Check "LSTM_stability" for the demo result of FINEST on Reddit dataset
+	3. Check "FINEST_BERT4Rec_Foursquare" for the demo result of FINEST on BERT4Rec and Foursquare dataset
 
 Abstract
 ---------------
