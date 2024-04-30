@@ -7,7 +7,7 @@ Overview
 
 This repository contains the code and dataset used in the FINEST paper.  
 [Link to Dataset](https://drive.google.com/file/d/1AvpAqBQvr0BduHDPVqssM5KIyIO_hHa4/view?usp=sharing)  
-**sh demo.sh** command will execute FINIST on the BERT4Rec model and Foursquare dataset (standard training for 50 epochs + fine-tuning for 50 epochs).  
+**sh demo.sh** command will execute FINIST on the LRURec model and LastFM dataset (standard training for 50 epochs + fine-tuning for 50 epochs).  
 
 
 Usage
@@ -23,11 +23,11 @@ Note that the fine-tuning speed can be significantly improved by optimizing pert
 
 Demo
 ---------------
-To run the demo, please follow the following procedure. **FINEST** demo will be executed with the Reddit dataset.
+To run the demo, please follow the following procedure. **FINEST** demo will be executed with the LastFM dataset.
 
 	1. Check permissions of files (if not, use the command "chmod 777 *")
 	2. Execute "sh demo.sh"
-	3. Check "FINEST_BERT4Rec_Foursquare" for the demo result of FINEST on BERT4Rec and Foursquare dataset
+	3. Check "FINEST_LRURec_LastFM" for the demo result of FINEST on LRURec and LastFM dataset
 
 Abstract
 ---------------

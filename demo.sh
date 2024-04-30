@@ -1,1 +1,1 @@
-python src/bert_main.py --data_path demo_data/foursquare.tsv --output FINEST_BERT4Rec_Foursquare
+python src/lru_main.py --data_path demo_data/lastfm1M.tsv --output FINEST_LRURec_LastFM

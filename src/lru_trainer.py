@@ -53,7 +53,7 @@ class LRUTrainer(torch.nn.Module):
         maxlen = args.bert_max_len
 
         #user-wise mini-batch formulation
-        num_batch = ((len(train)-1) // args.train_batch_size)+1
+        num_batch = (len(train) // args.train_batch_size)+1
         print(usernum,itemnum)
 
         ce = torch.nn.CrossEntropyLoss(ignore_index=0)
@@ -75,15 +75,17 @@ class LRUTrainer(torch.nn.Module):
         else:
             ranking_original = np.argsort(-original_logits,axis=1)
 
-        optimizer = torch.optim.Adam(self.model.parameters(), lr=args.lr) 
+        optimizer = torch.optim.Adam(self.model.parameters(), lr=args.lr, betas=(0.9, 0.98))
         total_epochs = args.training_epoch+args.fine_tuning_epoch
         loss_margin = torch.nn.MarginRankingLoss(margin=0.1)
         ones = torch.ones(args.topk*args.bert_max_len).to(self.device)
         start_time = time.time()
 
         for epoch in range(total_epochs):
+            self.model.train()
             if epoch==args.training_epoch:
-                optimizer = torch.optim.Adam(self.model.parameters(), lr=args.fine_tune_lr) 
+                optimizer = torch.optim.Adam(self.model.parameters(), lr=args.fine_tune_lr, betas=(0.9, 0.98))
+ 
             # perturbation simulation
             if epoch>=args.training_epoch:
                 chosen_indices = np.random.choice(training_indices,size=pert_size,replace=False)
@@ -109,7 +111,7 @@ class LRUTrainer(torch.nn.Module):
                 new_dataset = data_partition(new_data)
                 [train,  temp1,temp2,temp3,temp4,temp5,temp6] = new_dataset  
                 user_list = sorted(list(train.keys()))
-                num_batch = ((len(train)-1) // args.train_batch_size)+1
+                num_batch = ((len(train)) // args.train_batch_size)+1
 
             total_loss = 0
             shuffled = np.arange(len(train))
@@ -202,7 +204,7 @@ class LRUTrainer(torch.nn.Module):
 
             if epoch==total_epochs-1:                
                 self.model.eval()
-                test_num_batch = ((len(original_train)-1)//args.test_batch_size)+1
+                test_num_batch = (len(original_train)//args.test_batch_size)+1
                 MRR,HITS,NDCG, avg_RBO,avg_jaccard,count = 0,0,0,0,0,0
                 with torch.no_grad():
                     for step in range(test_num_batch):
@@ -240,7 +242,7 @@ class LRUTrainer(torch.nn.Module):
                         if len(test_seqs)==0:
                             continue
 
-                        seqs,labels = torch.LongTensor(test_seqs).to(self.device),np.array(test_labels,dtype=int).reshape(-1,1)
+                        seqs,labels = torch.LongTensor(test_seqs).to(self.device),np.array(test_labels,dtype=int)
                         scores = self.model(seqs)[0]
                         # we only need the next-item prediction result
                         scores = scores[:, -1, :]
@@ -249,7 +251,8 @@ class LRUTrainer(torch.nn.Module):
                         logits[count:count+cur_logits.shape[0]] = cur_logits
                         count+=cur_logits.shape[0]
                         for i in range(cur_logits.shape[0]):
-                            rank = np.count_nonzero(cur_logits[i]>cur_logits[i,labels[i]])+1
+                            target = cur_logits[i,labels[i]]
+                            rank = np.count_nonzero(cur_logits[i]>target)+1
                             MRR += 1/rank
                             HITS += (1 if rank<=10 else 0)
                             NDCG += (1/math.log2(rank+1) if rank<=10 else 0)
