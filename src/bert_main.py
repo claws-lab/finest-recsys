@@ -42,7 +42,7 @@ def main():
     parser.add_argument('--bert_attn_dropout', type=float, default=0.1)
     parser.add_argument('--bert_mask_prob', type=float, default=0.2)
     parser.add_argument('--train_batch_size', type=int, default=16)
-    parser.add_argument('--test_batch_size', type=int, default=1024)
+    parser.add_argument('--test_batch_size', type=int, default=128)
   
     args = parser.parse_args()
     os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
