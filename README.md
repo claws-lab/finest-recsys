@@ -7,8 +7,8 @@ Overview
 
 This repository contains the code and dataset used in the FINEST paper.  
 [Link to Dataset](https://drive.google.com/file/d/1AvpAqBQvr0BduHDPVqssM5KIyIO_hHa4/view?usp=sharing)  
-**sh demo.sh** command will execute FINIST on the LRURec model and LastFM dataset (standard training for 50 epochs + fine-tuning for 50 epochs).  
-
+**sh demo.sh** command will execute FINIST on the LRURec model and LastFM dataset (standard training for 50 epochs + fine-tuning for 50 epochs). 
+The demo execution will generate average stability and next-item metrics of LRURec + FINEST model across 3 different runs with 3 different random seeds.
 
 Usage
 ---------------
