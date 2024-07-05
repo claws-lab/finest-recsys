@@ -19,7 +19,6 @@ class BERTTrainer(torch.nn.Module):
         self.args = args
         self.device = device 
         self.num_item = len(np.unique(original_data[:,1]))
-        self.random_seed = np.random.randint(0,2147483647)
         self.model = bert_model
         self.original_data = original_data
 
@@ -46,12 +45,13 @@ class BERTTrainer(torch.nn.Module):
            
         return train,test,umap,smap
  
-    def traintest(self,original_logits,reference_list,competitive_items,args,data,mode):
-        torch.manual_seed(self.random_seed)
-        torch.cuda.manual_seed_all(self.random_seed)
+    def traintest(self,original_logits,reference_list,competitive_items,args,data,mode,seed):
+
+        torch.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)
         torch.backends.cudnn.deterministic = True
         torch.backends.cudnn.benchmark = False
-        np.random.seed(self.random_seed)
+        np.random.seed(seed)
 
         # loss function
         ce = torch.nn.CrossEntropyLoss(ignore_index=0)
@@ -86,7 +86,7 @@ class BERTTrainer(torch.nn.Module):
         least_popular_item = occurence_count.most_common()[-1][0] 
 
         # logits contains recommendation probabilities for test instances
-        logits = np.zeros((test_num,self.num_item))
+        logits = np.zeros((test_num,self.num_item+2))
 
         if mode=="original_training":
             reference_list = torch.zeros((data.shape[0],args.topk),dtype=torch.long).to(self.device)
@@ -213,7 +213,7 @@ class BERTTrainer(torch.nn.Module):
                         first,second = torch.gather(valid_output,1,topk_items).flatten(),torch.gather(valid_output,1,competitive_items[original_indices]).flatten()
                         loss2 = loss_margin(first,second,ones[:first.shape[0]])
 
-                        loss += 1.0*(loss1+loss2) 
+                        loss += 1.0*(loss1+loss2)                         
                 
                 elif mode=="original_training" and epoch==args.training_epoch-1:
                     # obtain reference rank list for all training istances
@@ -284,7 +284,7 @@ class BERTTrainer(torch.nn.Module):
                         softmax = torch.nn.Softmax(dim=1)
                         cur_logits = softmax(scores).cpu().numpy()
 
-                        logits[count:count+cur_logits.shape[0]] = cur_logits[:,1:-1]
+                        logits[count:count+cur_logits.shape[0]] = cur_logits
                         count+=cur_logits.shape[0]
                         for i in range(cur_logits.shape[0]):
                             rank = np.count_nonzero(cur_logits[i]>cur_logits[i,labels[i]])+1

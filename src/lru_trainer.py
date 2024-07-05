@@ -17,27 +17,26 @@ from torch.nn import functional as F
 
 
 class LRUTrainer(torch.nn.Module):
-    def __init__(self, user_num, item_num, args,device,random_seed,dataset,model):
+    def __init__(self, user_num, item_num, args,device,dataset,model):
         super(LRUTrainer, self).__init__()
 
         self.user_num = user_num
         self.item_num = item_num
         self.model = model
         self.device = device
-        self.random_seed = random_seed
         self.dataset=dataset
         self.args = args
 
     def clip_gradients(self, limit=5):
         torch.nn.utils.clip_grad_norm_(self.model.parameters(), limit)
  
-    def traintest(self,original_logits,reference_list,competitive_items,data,dataset,args,mode):
+    def traintest(self,original_logits,reference_list,competitive_items,data,dataset,args,mode,seed):
 
-        torch.manual_seed(self.random_seed)
-        torch.cuda.manual_seed_all(self.random_seed)
+        torch.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)
         torch.backends.cudnn.deterministic = True
         torch.backends.cudnn.benchmark = False
-        np.random.seed(self.random_seed)
+        np.random.seed(seed)
 
         # create original training data (unperturbed), current training data (might be perturbed), and test data for LRURec
         [train,  test, usernum, itemnum, timenum,  user_map,item_map] = dataset

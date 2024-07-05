@@ -1,4 +1,5 @@
 from torch import nn as nn
+import torch
 from bert_attention import *
 import math
 from collections import defaultdict,Counter
@@ -10,7 +11,6 @@ class BERT(nn.Module):
         self.args = args
         self.device = device 
         self.num_item = len(np.unique(original_data[:,1]))
-        self.random_seed = np.random.randint(0,2147483647)
         self.embedding = BERTEmbedding(self.args,self.num_item)
         self.model = BERTModel(self.args,self.num_item)
         self.truncated_normal_init()
