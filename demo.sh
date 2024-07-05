@@ -1,1 +1,2 @@
-python src/lru_main.py --data_path data/lastfm.tsv --output result/FINEST_LRURec_LastFM --gpu 1
+mkdir result/
+python src/bert_main.py --data_path data/lastfm.tsv --output result/FINEST_bert4rec_LastFM --gpu 4
