@@ -1,2 +1,2 @@
 mkdir result/
-python src/bert_main.py --data_path data/lastfm.tsv --output result/FINEST_bert4rec_LastFM --gpu 4
+python src/lru_main.py --data_path data/lastfm.tsv --output result/FINEST_LRURec_LastFM
